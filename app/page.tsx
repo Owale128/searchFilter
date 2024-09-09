@@ -1,9 +1,11 @@
-import Image from "next/image";
+'use client';
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter()
   return (
-  <div className="flex justify-center items-center min-h-screen">
-      <h1 className="text-4xl">Home Page</h1>
+  <div className="flex justify-center items-center min-h-screen text-4xl font-bold">
+        <button onClick={() => router.push('/searchFilter')}>Klicka Here</button>
     </div>
   );
 }
