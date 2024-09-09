@@ -1,14 +1,17 @@
-import React from 'react'
+'use client'
+import React, { FormEvent, useState } from 'react'
 import { data } from '../data/mockApi'
 
 const Table = () => {
-    console.log(data)
+    const [search, setSearch] = useState('')
+
   return (
     <div>
       <form className="my-6">
         <input
           type="text"
           placeholder="Search Here"
+          onChange={(e) => setSearch(e.target.value)}
           className="border-2 border-black rounded-1xl text-center"
         />
       </form>
@@ -22,7 +25,9 @@ const Table = () => {
           </tr>
         </thead>
         <tbody>
-            {data.map((person) =>(
+            {data.filter((person) =>{
+                return search.toLocaleLowerCase() === '' ? person : person.first_name.toLocaleLowerCase().includes(search)
+            }).map((person) =>(
             <tr key={person.id}>
             <td className="border px-4 py-2 text-center">{person.first_name}</td>
             <td className="border px-4 py-2 text-center">{person.last_name}</td>

@@ -1,5 +1,6 @@
+import { IPerson } from "../model/IPerson";
 
-export const data = [{
+export const data: IPerson[] = [{
     "id": 1,
     "first_name": "Helen",
     "last_name": "Molesworth",
