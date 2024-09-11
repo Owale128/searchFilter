@@ -1,20 +1,14 @@
-'use client'
-import React, { FormEvent, useState } from 'react'
-import { data } from '../data/mockApi'
+import React from 'react';
+import { IPerson } from '../model/IPerson';
 
-const Table = () => {
-    const [search, setSearch] = useState('')
+interface ITable {
+  data: IPerson[]
+}
 
+const Table = ({data = []}: ITable)=> {
+  
   return (
     <div>
-      <form className="my-6">
-        <input
-          type="text"
-          placeholder="Search Here"
-          onChange={(e) => setSearch(e.target.value)}
-          className="border-2 border-black rounded-1xl text-center"
-        />
-      </form>
       <table className="table-auto border-collapse">
         <thead className="border-2 border-black">
           <tr>
@@ -25,20 +19,18 @@ const Table = () => {
           </tr>
         </thead>
         <tbody>
-            {data.filter((person) =>{
-                return search.toLocaleLowerCase() === '' ? person : person.first_name.toLocaleLowerCase().includes(search)
-            }).map((person) =>(
+            {data.map((person) =>(
             <tr key={person.id}>
             <td className="border px-4 py-2 text-center">{person.first_name}</td>
             <td className="border px-4 py-2 text-center">{person.last_name}</td>
             <td className="border px-4 py-2 text-center">{person.email}</td>
-            <td className="border px-4 py-2 text-center">{person.Phone}</td>
-          </tr>
+            <td className="border px-4 py-2 text-center">{person.phone}</td>
+            </tr>
         ))}
         </tbody>
       </table>
     </div>
-  )
+  );
 }
 
-export default Table
+export default Table;
