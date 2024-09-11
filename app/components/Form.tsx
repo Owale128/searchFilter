@@ -7,8 +7,17 @@ import Table from './Table'
 const Form = () => {
     const [query, setNewQuery] = useState('')
 
+    const keys = ['first_name', 'last_name', 'email']
+
     const search = (data: IPerson []) => {
-      return data.filter((item) => item.first_name.toLocaleLowerCase().includes(query.toLocaleLowerCase()))
+      return data.filter(
+        (person) => 
+
+          keys.some((key) => {
+            const value = (person[key as keyof IPerson] as string)
+            return value.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+          }) 
+        )
     }
   
   return (
