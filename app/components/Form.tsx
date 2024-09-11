@@ -1,19 +1,29 @@
 'use client'
-import React, { useState } from 'react'
-import { Data } from '../data/mockApi'
+import React, { useEffect, useState } from 'react'
 import { IPerson } from '../model/IPerson'
 import Table from './Table'
+import axios from 'axios'
 
 const Form = () => {
     const [query, setNewQuery] = useState('')
+    const [data, setData] = useState<IPerson[]>([])
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+        const repsonse = await axios.get('/api/hello')
+        setData(repsonse.data.data)
+      } catch (error) {
+        console.error('Error fetching', error)
+      }
+    }
+      fetchData()
+    }, [])
 
     const keys = ['first_name', 'last_name', 'email']
 
     const search = (data: IPerson []) => {
-      return data.filter(
-        (person) => 
-
-          keys.some((key) => {
+      return data.filter((person) => keys.some((key) => {
             const value = (person[key as keyof IPerson] as string)
             return value.toLocaleLowerCase().includes(query.toLocaleLowerCase())
           }) 
@@ -30,7 +40,7 @@ const Form = () => {
           className="border-2 border-black rounded-1xl text-center w-72 mb-3 p-1"
         />
       </form>
-      <Table data={search(Data)}/>
+      <Table data={search(data)}/>
     </div>
   )
 }

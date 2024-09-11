@@ -5,7 +5,7 @@ interface ITable {
   data: IPerson[]
 }
 
-const Table = ({data = []}: ITable)=> {
+const Table = ({data}: ITable)=> {
   
   return (
     <div>
