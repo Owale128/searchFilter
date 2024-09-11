@@ -1,6 +1,5 @@
 'use client';
 import { useRouter } from "next/navigation";
-import Form from "./components/Form";
 
 export default function Home() {
   const router = useRouter()
