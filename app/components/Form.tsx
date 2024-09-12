@@ -11,14 +11,14 @@ const Form = () => {
     useEffect(() => {
       const fetchData = async () => {
         try {
-        const repsonse = await axios.get('/api/hello')
+        const repsonse = await axios.get(`/api/data?q=${query}`)
         setData(repsonse.data.data)
       } catch (error) {
         console.error('Error fetching', error)
       }
     }
-      fetchData()
-    }, [])
+     if(query.length === 0 || query.length > 2) fetchData()
+    }, [query])
 
     const keys = ['first_name', 'last_name', 'email']
 
