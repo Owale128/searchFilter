@@ -3,27 +3,30 @@ import axios from 'axios'
 import Table from './Table'
 import { sortDataByFirstName } from '../utils/sortUtils'
 import { IPerson } from '../model/IPerson'
-import { useEffect, useState } from 'react'
+import { ChangeEvent, FormEvent, useEffect, useReducer} from 'react'
+import { ActionType, FormReducer, initialState } from '../reducer/FormReducer'
 
 const Form = () => {
-    const [query, setNewQuery] = useState('')
-    const [asc, setAsc] = useState(false)
-    const [data, setData] = useState<IPerson[]>([])
+    const [state, dispatch] = useReducer(FormReducer, initialState )
 
     useEffect(() => {
       const fetchData = async () => {
         try {
-        const repsonse = await axios.get(`/api/data?q=${query}`)
-        setData(repsonse.data.data)
+        const repsonse = await axios.get(`/api/data?q=${state.query}`)
+        dispatch({ type: ActionType.SET_DATA, payload: repsonse.data.data})
       } catch (error) {
         console.error('Error fetching', error)
       }
     }
-     if(query.length === 0 || query.length > 2) fetchData()
-    }, [query])
+     if(state.query.length === 0 || state.query.length > 2) fetchData()
+    }, [state.query])
 
     const handleSort = () => {
-        setAsc(!asc)
+        dispatch({ type: ActionType.SET_SORT})
+    }
+
+    const handleQueryChange = (e: ChangeEvent<HTMLInputElement>) => {
+      dispatch({type: ActionType.SET_QUERY, payload: e.target.value })
     }
 
     const keys = ['first_name', 'last_name', 'email']
@@ -31,12 +34,12 @@ const Form = () => {
     const search = (data: IPerson []) => {
       return data.filter((person) => keys.some((key) => {
             const value = (person[key as keyof IPerson] as string)
-            return value.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+            return value.toLocaleLowerCase().includes(state.query)
           }) 
         )
     }
 
-    const sortedData = sortDataByFirstName(search(data), asc)
+    const sortedData = sortDataByFirstName(search(state.data), state.asc)
   
   return (
     <div>
@@ -44,10 +47,10 @@ const Form = () => {
         <input
           type="text"
           placeholder="Search Here"
-          onChange={(e) => setNewQuery(e.target.value)}
+          onChange={handleQueryChange}
           className="border-2 border-black rounded-1xl text-center w-72 mb-3 p-1"
         />
-        <label htmlFor="sort" className='block'>Sort</label>
+        <label htmlFor="sort">Sort</label>
         <input type="checkbox"
         onChange={handleSort}
         className='ml-2'
