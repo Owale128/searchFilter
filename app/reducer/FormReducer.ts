@@ -8,22 +8,28 @@ export interface IAction <T> {
 export enum ActionType {
     SET_QUERY,
     SET_DATA,
-    SET_SORT
+    SET_SORT,
+    SET_PAGE,
+    SET_PAGE_SIZE
 }
 export interface IState {
     query: string;
     data: IPerson[];
     asc: boolean;
+    page: number;
+    pageSize: number;
 }
 
 export const initialState: IState = {
     query: '',
     data: [],
-    asc: false
+    asc: false,
+    page: 1,
+    pageSize: 5
 }
 
 
-export const FormReducer = (state: IState, action: IAction<string | IPerson[]>) => {
+export const FormReducer = (state: IState, action: IAction<string | IPerson[] | boolean | number>) => {
 
     switch(action.type) {
         case ActionType.SET_DATA:
@@ -33,7 +39,13 @@ export const FormReducer = (state: IState, action: IAction<string | IPerson[]>) 
             return {...state, query: action.payload as string}
 
         case ActionType.SET_SORT:
-            return {...state, asc: !state.asc }
+            return {...state, asc: !state.asc as boolean }
+
+            case ActionType.SET_PAGE:
+                return {...state, page: action.payload as number}
+
+                case ActionType.SET_PAGE_SIZE:
+                    return {...state, pageSize: action.payload as number, page: 1}
 
             default:
                 return state

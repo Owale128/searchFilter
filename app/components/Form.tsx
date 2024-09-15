@@ -1,46 +1,20 @@
-'use client'
-import axios from 'axios'
+import { ChangeEvent } from 'react';
 import Table from './Table'
-import { sortDataByFirstName } from '../utils/sortUtils'
-import { IPerson } from '../model/IPerson'
-import { ChangeEvent, FormEvent, useEffect, useReducer} from 'react'
-import { ActionType, FormReducer, initialState } from '../reducer/FormReducer'
+import { IPerson } from '../model/IPerson';
 
-const Form = () => {
-    const [state, dispatch] = useReducer(FormReducer, initialState )
+interface IForm {
+  page: number;
+  pageSize: number;
+  sortedData: IPerson[]
+  handleSort: () => void;
+  paginatedData: IPerson[];
+  handlePageChange: (newpPage: number) => void;
+  handlePageSize: (e: ChangeEvent<HTMLSelectElement>) => void;
+  handleQueryChange: (e: ChangeEvent<HTMLInputElement>) => void;
+}
 
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-        const repsonse = await axios.get(`/api/data?q=${state.query}`)
-        dispatch({ type: ActionType.SET_DATA, payload: repsonse.data.data})
-      } catch (error) {
-        console.error('Error fetching', error)
-      }
-    }
-     if(state.query.length === 0 || state.query.length > 2) fetchData()
-    }, [state.query])
-
-    const handleSort = () => {
-        dispatch({ type: ActionType.SET_SORT})
-    }
-
-    const handleQueryChange = (e: ChangeEvent<HTMLInputElement>) => {
-      dispatch({type: ActionType.SET_QUERY, payload: e.target.value })
-    }
-
-    const keys = ['first_name', 'last_name', 'email']
-
-    const search = (data: IPerson []) => {
-      return data.filter((person) => keys.some((key) => {
-            const value = (person[key as keyof IPerson] as string)
-            return value.toLocaleLowerCase().includes(state.query)
-          }) 
-        )
-    }
-
-    const sortedData = sortDataByFirstName(search(state.data), state.asc)
-  
+const Form = ({page, pageSize, sortedData, handleSort, paginatedData, handlePageChange, handlePageSize, handleQueryChange }: IForm) => {
+   
   return (
     <div>
       <form className="my-3 flex flex-col justify-center text-center items-center">
@@ -56,9 +30,35 @@ const Form = () => {
         className='ml-2'
         id='sort'
         />
+
+<label htmlFor="pageSize" className="block mt-4">Items per page:</label>
+                <select id="pageSize" onChange={handlePageSize} value={pageSize}>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
       </form>
-      <Table data={sortedData}/>
-    </div>
+      <Table data={paginatedData}/>
+      <div className="flex justify-center space-x-4 mt-4">
+                <button
+                    onClick={() => handlePageChange(page - 1)}
+                    disabled={page === 1}
+                >
+                    Previous
+                </button>
+                <span>
+                    Page {page} of {Math.ceil(sortedData.length / pageSize)}
+                </span>
+                <button
+                    onClick={() => handlePageChange(page + 1)}
+                    disabled={page === Math.ceil(sortedData.length / pageSize)}
+                >
+                    Next
+                </button>
+            </div>
+        </div>
   )
 }
 

@@ -18,7 +18,7 @@ import { IPerson } from "@/app/model/IPerson";
             )
         }
 
-        const filteredData = search(Data).splice(0, 60)
+        const filteredData = search(Data).splice(0, 100)
 
         return NextResponse.json({data: filteredData})
     }
