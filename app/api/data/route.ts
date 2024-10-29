@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { Data } from "@/app/data/mockApi";
+import { Data } from "@/app/data/personData";
 import { IPerson } from "@/app/model/IPerson";
 
 

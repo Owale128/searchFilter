@@ -1,19 +1,15 @@
-import { ChangeEvent } from 'react';
 import Table from './Table'
-import { IPerson } from '../model/IPerson';
+import { IForm } from '../model/IForm'
 
-interface IForm {
-  page: number;
-  pageSize: number;
-  sortedData: IPerson[]
-  handleSort: () => void;
-  paginatedData: IPerson[];
-  handlePageChange: (newpPage: number) => void;
-  handlePageSize: (e: ChangeEvent<HTMLSelectElement>) => void;
-  handleQueryChange: (e: ChangeEvent<HTMLInputElement>) => void;
-}
-
-const Form = ({page, pageSize, sortedData, handleSort, paginatedData, handlePageChange, handlePageSize, handleQueryChange }: IForm) => {
+const Form = ({
+  page, 
+  pageSize, 
+  sortedData, 
+  handleSort, 
+  paginatedData,
+  handlePageChange,
+  handlePageSize, 
+  handleQueryChange }: IForm) => {
    
   return (
     <div>
@@ -32,13 +28,13 @@ const Form = ({page, pageSize, sortedData, handleSort, paginatedData, handlePage
         />
 
 <label htmlFor="pageSize" className="block mt-4">Items per page:</label>
-                <select id="pageSize" onChange={handlePageSize} value={pageSize}>
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                </select>
+          <select id="pageSize" onChange={handlePageSize} value={pageSize}>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            </select>
       </form>
       <Table data={paginatedData}/>
       <div className="flex justify-center space-x-4 mt-4">

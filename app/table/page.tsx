@@ -4,7 +4,7 @@ import axios from 'axios'
 import Form from '../components/Form'
 import { sortDataByFirstName } from '../utils/sortUtils'
 import { IPerson } from '../model/IPerson'
-import { ChangeEvent, FormEvent, useEffect, useReducer} from 'react'
+import { ChangeEvent, useEffect, useReducer} from 'react'
 import { ActionType, FormReducer, initialState } from '../reducer/FormReducer'
 
 const TablePage = () => {
